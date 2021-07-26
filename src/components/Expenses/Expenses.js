@@ -6,19 +6,24 @@ import "./Expenses.css";
 
 function Expenses(props) {
 
-   const [selectedYear, setSelectedYear] = useState("2020");
+   const [selectedYear, setSelectedYear] = useState("All");
 
    const yearSelectedHandler = (event) => {
       setSelectedYear(event.target.value);
    };
 
+   let filteredArray = props.expenses;
+
+   if (selectedYear != "All") {
+      // eslint-disable-next-line
+      filteredArray = props.expenses.filter(expenseItem => expenseItem.date.getFullYear() == selectedYear);
+   }
+
    return (
       <Card className="expenses">
          <ExpensesFilter onYearSelected={yearSelectedHandler} selected={selectedYear} />
-         <ExpenseItem expense={props.expenses[0]} />
-         <ExpenseItem expense={props.expenses[1]} />
-         <ExpenseItem expense={props.expenses[2]} />
-         <ExpenseItem expense={props.expenses[3]} />
+
+         {filteredArray.map(expenseItem => <ExpenseItem expense={expenseItem} key={expenseItem.id} />)}
       </Card>
    );
 }
