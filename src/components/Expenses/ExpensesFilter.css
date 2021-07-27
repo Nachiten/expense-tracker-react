@@ -27,3 +27,8 @@ select {
   background-color: rgb(58, 58, 58);
   color: white;
 }
+
+p {
+  color: white;
+  margin-left: 1rem;
+}
