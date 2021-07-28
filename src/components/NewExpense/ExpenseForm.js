@@ -9,8 +9,6 @@ const ExpenseForm = (props) => {
       enteredAmount: "",
    });
 
-   const [newExpenseShowed, setNewExpenseShowed] = useState(false);
-
    const titleChangeHandler = (event) => {
       setUserInput((prevState) => {
          return {
@@ -39,8 +37,6 @@ const ExpenseForm = (props) => {
    };
 
    const submitHandler = (event) => {
-      setNewExpenseShowed(false);
-
       event.preventDefault();
 
       console.log(event.label);
@@ -56,14 +52,6 @@ const ExpenseForm = (props) => {
       resetFormValues();
    };
 
-   const cancelHandler = () => {
-      setNewExpenseShowed(false);
-   }
-
-   const showNewExpense = () => {
-      setNewExpenseShowed(true);
-   }
-
    const resetFormValues = () => {
       setUserInput({
          enteredTitle: "",
@@ -71,16 +59,6 @@ const ExpenseForm = (props) => {
          enteredAmount: "",
       });
    };
-
-   if (!newExpenseShowed){
-      return( 
-      <div className="new-expense__controls">
-         <div className="new-expense__actions">
-         <button onClick={showNewExpense} className="agregar_gasto">Añadir Nuevo Gasto</button>
-         </div>
-      </div>
-      )
-   }
 
    return (
       <form onSubmit={submitHandler}>
@@ -110,7 +88,7 @@ const ExpenseForm = (props) => {
                <input
                   type="date"
                   value={userInput.enteredDate}
-                  min="2000-01-01"
+                  min="2019-01-01"
                   max="2023-12-31"
                   onChange={dateChangeHandler}
                   required
@@ -118,7 +96,9 @@ const ExpenseForm = (props) => {
             </div>
          </div>
          <div className="new-expense__actions">
-            <button onClick={cancelHandler}>Cancelar</button>
+            <button type="button" onClick={props.closeFormHandler}>
+               Cancelar
+            </button>
             <button type="submit">Añadir Gasto</button>
          </div>
       </form>

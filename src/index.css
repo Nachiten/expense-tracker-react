@@ -2,6 +2,7 @@
 
 * {
   box-sizing: border-box;
+  transition: all 100ms linear 0s;
 }
 
 html {

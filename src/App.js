@@ -6,19 +6,19 @@ const EXPENSES_INICIALES = [
    {
       id: "e1",
       title: "Papel Higienico",
-      amount: 94.12,
+      amount: 150,
       date: new Date(2020, 7, 25),
    },
    {
       id: "e2",
       title: "Seguro Auto",
-      amount: 5200.42,
+      amount: 200,
       date: new Date(2020, 8, 10),
    },
    {
       id: "e3",
       title: "Jabon Liquido",
-      amount: 150.32,
+      amount: 300.32,
       date: new Date(2019, 2, 20),
    },
    {
@@ -30,7 +30,7 @@ const EXPENSES_INICIALES = [
    {
       id: "e5",
       title: "Computadora",
-      amount: 35000.22,
+      amount: 20000.22,
       date: new Date(2019, 1, 1),
    },
    {
