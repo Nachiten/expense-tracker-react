@@ -14,20 +14,38 @@ function Expenses(props) {
       setSelectedYear(event.target.value);
    };
 
-   let filteredArray = props.expenses.sort(
-      (unExpense, otroExpense) => unExpense.date - otroExpense.date
-   );
-
-   if (selectedYear !== "All") {
-      filteredArray = props.expenses.filter(
-         (expenseItem) =>
-            expenseItem.date.getFullYear().toString() === selectedYear
-      );
-   }
-
    const actualizarTotalMaximum = (valor) => {
       setTotalMaximum(valor);
    };
+
+   let filteredArray = [];
+
+   if (props.hayExpenses) {
+      filteredArray = props.expenses.sort(
+         (unExpense, otroExpense) => unExpense.date - otroExpense.date
+      );
+
+      if (selectedYear !== "All") {
+         filteredArray = filteredArray.filter(
+            (expenseItem) =>
+               expenseItem.date.getFullYear().toString() === selectedYear
+         );
+      }
+   }
+
+   let expensesContent = <ExpensesList items={filteredArray} />;
+
+   if (props.error) {
+      expensesContent = (
+         <h2 className="expenses-list__fallback">{props.error}</h2>
+      );
+   }
+
+   if (props.isLoading) {
+      expensesContent = (
+         <h2 className="expenses-list__fallback">Cargando gastos ...</h2>
+      );
+   }
 
    return (
       <Card className="expenses">
@@ -41,7 +59,7 @@ function Expenses(props) {
             selectedYear={selectedYear}
             setearTotalMaximum={actualizarTotalMaximum}
          />
-         <ExpensesList items={filteredArray} />
+         {expensesContent}
       </Card>
    );
 }

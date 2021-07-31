@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import Chart from "../Chart/Chart";
 
@@ -55,8 +55,6 @@ const ExpensesChart = (props) => {
    useEffect(() => {
       props.setearTotalMaximum(totalMaximum);
    }, [props, totalMaximum]);
-
-   console.log("Total maximum: " + totalMaximum);
 
    return <Chart dataPoints={chartDataPoints} totalMaximum={totalMaximum} />;
 };
