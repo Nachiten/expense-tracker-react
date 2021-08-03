@@ -39,7 +39,8 @@ const ExpenseForm = (props) => {
    const submitHandler = (event) => {
       event.preventDefault();
 
-      console.log(event.label);
+      console.log("Fecha Ingresada: ");
+      console.log(userInput.enteredDate);
 
       const expenseData = {
          title: userInput.enteredTitle,

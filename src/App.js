@@ -9,6 +9,48 @@ function App() {
    const [isLoading, setIsLoading] = useState(false);
    const [error, setError] = useState(null);
 
+   async function deleteExpenseHandler(expenseId) {
+      console.log(expenseId);
+      try {
+         const response = await fetch(BASE_URL + "expenses/" + expenseId, {
+            method: "DELETE",
+            body: expenseId,
+            headers: {
+               "Content-Type": "application/json",
+            },
+         });
+
+         if (!response.ok) {
+            throw new Error("Something went wrong!");
+         }
+
+         fetchExpensesHandler();
+      } catch (error) {
+         setError(error.message);
+      }
+   }
+
+   async function addExpenseHandler(expense) {
+      try {
+         const response = await fetch(BASE_URL + "expenses.json", {
+            method: "POST",
+            body: JSON.stringify(expense),
+            headers: {
+               "Content-Type": "application/json",
+            },
+         });
+
+         if (!response.ok) {
+            throw new Error("Something went wrong!");
+         }
+
+         fetchExpensesHandler();
+
+      } catch (error) {
+         setError(error.message);
+      }
+   };
+
    const fetchExpensesHandler = useCallback(async () => {
       setIsLoading(true);
       setError(null);
@@ -47,34 +89,6 @@ function App() {
       fetchExpensesHandler();
    }, [fetchExpensesHandler]);
 
-   async function pushExpense(expense) {
-      try {
-         const response = await fetch(BASE_URL + "expenses.json", {
-            method: "POST",
-            body: JSON.stringify(expense),
-            headers: {
-               "Content-Type": "application/json",
-            },
-         });
-
-         if (!response.ok) {
-            throw new Error("Something went wrong!");
-         }
-
-         console.log(response.status);
-      } catch (error) {
-         setError(error.message);
-      }
-   }
-
-   const addExpenseHandler = (expense) => {
-      setExpenses((prevState) => {
-         return [...prevState, expense];
-      });
-
-      pushExpense(expense);
-   };
-
    return (
       <div>
          <NewExpense onAddExpense={addExpenseHandler} />
@@ -83,6 +97,7 @@ function App() {
             hayExpenses={expenses.length > 0}
             error={error}
             isLoading={isLoading}
+            deleteExpenseHandler={deleteExpenseHandler}
          />
       </div>
    );
