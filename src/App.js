@@ -1,8 +1,9 @@
 import NewExpense from "./components/NewExpense/NewExpense";
 import Expenses from "./components/Expenses/Expenses";
 import { useState, useEffect, useCallback } from "react";
+import fire from "./fire";
 
-const BASE_URL = "https://http-requests-react-default-rtdb.firebaseio.com/";
+//const BASE_URL = "https://http-requests-react-default-rtdb.firebaseio.com/";
 
 function App() {
    const [expenses, setExpenses] = useState([]);
@@ -10,6 +11,7 @@ function App() {
    const [error, setError] = useState(null);
 
    async function deleteExpenseHandler(expenseId) {
+      /*
       console.log(expenseId);
       try {
          const response = await fetch(BASE_URL + "expenses/" + expenseId, {
@@ -28,61 +30,72 @@ function App() {
       } catch (error) {
          setError(error.message);
       }
+      */
    }
 
    async function addExpenseHandler(expense) {
-      try {
-         const response = await fetch(BASE_URL + "expenses.json", {
-            method: "POST",
-            body: JSON.stringify(expense),
-            headers: {
-               "Content-Type": "application/json",
-            },
-         });
+      setIsLoading(true);
+      setError(false);
 
-         if (!response.ok) {
-            throw new Error("Something went wrong!");
-         }
+      let expensesRef = fire.database().ref("expenses");
 
-         fetchExpensesHandler();
+      expensesRef
+         .push()
+         .set({
+            amount: expense.amount,
+            title: expense.title,
+            date: expense.date.toString(),
+         })
+         .then(() => {
+            fetchExpensesHandler();
+            setIsLoading(false);
+         })
+         .catch((error) => setError(error.message));
+   }
 
-      } catch (error) {
-         setError(error.message);
-      }
-   };
+   function snapshotToArray(snapshot) {
+      var returnArr = [];
+
+      snapshot.forEach(function (childSnapshot) {
+         var item = childSnapshot.val();
+         item.key = childSnapshot.key;
+
+         returnArr.push(item);
+      });
+
+      return returnArr;
+   }
 
    const fetchExpensesHandler = useCallback(async () => {
       setIsLoading(true);
       setError(null);
-      try {
-         const response = await fetch(BASE_URL + "expenses.json");
-         if (!response.ok) {
-            throw new Error("Something went wrong!");
-         }
 
-         const data = await response.json();
+      let expensesRef = fire.database().ref("expenses");
 
-         const loadedExpenses = [];
+      // Attach an asynchronous callback to read the data at our posts reference
+      expensesRef.on(
+         "value",
+         (snapshot) => {
+            const incomingExpenses = snapshotToArray(snapshot);
 
-         for (const key in data) {
-            loadedExpenses.push({
-               id: key,
-               amount: data[key].amount,
-               date: new Date(data[key].date),
-               title: data[key].title,
+            console.log(incomingExpenses);
+
+            const mappedExpenses = incomingExpenses.map((unExpense) => {
+               return {
+                  amount: unExpense.amount,
+                  title: unExpense.title,
+                  date: new Date(unExpense.date),
+                  id: unExpense.key,
+               };
             });
-         }
 
-         setExpenses(loadedExpenses);
-      } catch (error) {
-         setError(
-            <div>
-               <p>Ha Habido un error :(</p>
-               <p>Mensaje: {error.message}</p>
-            </div>
-         );
-      }
-      setIsLoading(false);
+            setExpenses(mappedExpenses);
+            setIsLoading(false);
+         },
+         (errorObject) => {
+            setError(errorObject.name);
+         }
+      );
    }, []);
 
    useEffect(() => {
