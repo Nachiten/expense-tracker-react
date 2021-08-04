@@ -16,8 +16,6 @@ const NewExpense = (props) => {
 
    const saveExpenseDataHandler = (enteredExpenseData) => {
       props.onAddExpense(enteredExpenseData);
-
-      setNewExpenseShowed(false);
    };
 
    return (
