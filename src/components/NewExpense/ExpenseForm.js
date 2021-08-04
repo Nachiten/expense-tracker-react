@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./ExpenseForm.css";
 
 const ExpenseForm = (props) => {
    const [userInput, setUserInput] = useState({
-      enteredTitle: "",
-      enteredDate: "",
-      enteredAmount: "",
+      enteredTitle: props.title,
+      enteredDate: props.date,
+      enteredAmount: props.amount,
    });
+
+   useEffect(() => {
+      setUserInput({
+         enteredTitle: props.title,
+         enteredDate: props.date,
+         enteredAmount: props.amount,
+      });
+      console.log("Se actualizaron valores.");
+   }, [props.title, props.date, props.amount]);
 
    const titleChangeHandler = (event) => {
       setUserInput((prevState) => {
@@ -70,6 +79,7 @@ const ExpenseForm = (props) => {
                   type="text"
                   value={userInput.enteredTitle}
                   onChange={titleChangeHandler}
+                  defaultValue="Titulo del gasto"
                   required
                />
             </div>

@@ -15,6 +15,7 @@ function ExpenseItem(props) {
           <h2>{expense.title}</h2>
           <div className="expense-item__price">${expense.amount}</div>
           <button className="expense-item__button" onClick={() => props.deleteExpenseHandler(expense.id)}>Eliminar</button>
+          <button className="expense-item__button" onClick={() => props.editExpenseHandler(expense)}>Editar</button>
         </div>
       </Card>
     </li>

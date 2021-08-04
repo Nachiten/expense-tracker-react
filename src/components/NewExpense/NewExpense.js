@@ -24,6 +24,7 @@ const NewExpense = (props) => {
             <ExpenseForm
                onSaveExpenseData={saveExpenseDataHandler}
                closeFormHandler={closeFormHandler}
+               title={props.title} amount={props.amount} date={props.date}
             />
          ) : (
             <button onClick={openFormHandler}>Añadir Nuevo Gasto</button>

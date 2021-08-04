@@ -8,6 +8,38 @@ function App() {
    const [isLoading, setIsLoading] = useState(false);
    const [error, setError] = useState(null);
 
+   const [newExpense, setNewExpense] = useState({
+      enteredTitle: "",
+      enteredDate: "",
+      enteredAmount: "",
+   });
+
+   function editExpenseHandler(expense) {
+      setNewExpense({
+         enteredTitle: expense.title,
+         enteredAmount: expense.amount,
+         enteredDate: fromDateToString(expense.date),
+      });
+
+      console.log("Expense title: " + newExpense.enteredTitle);
+      console.log("Expense amount: " + newExpense.enteredAmount);
+      console.log("Expense date: " + newExpense.enteredDate);
+      console.log("Edit expense handler");
+
+      deleteExpenseHandler(expense.id);
+   }
+
+   function fromDateToString(d) {
+      var month = "" + (d.getMonth() + 1),
+         day = "" + d.getDate(),
+         year = d.getFullYear();
+
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
+
+      return [year, month, day].join("-");
+   }
+
    async function deleteExpenseHandler(expenseId) {
       setError(null);
       setIsLoading(true);
@@ -89,13 +121,19 @@ function App() {
 
    return (
       <div>
-         <NewExpense onAddExpense={addExpenseHandler} />
+         <NewExpense
+            title={newExpense.enteredTitle}
+            amount={newExpense.enteredAmount}
+            date={newExpense.enteredDate}
+            onAddExpense={addExpenseHandler}
+         />
          <Expenses
             expenses={expenses}
             hayExpenses={expenses.length > 0}
             error={error}
             isLoading={isLoading}
             deleteExpenseHandler={deleteExpenseHandler}
+            editExpenseHandler={editExpenseHandler}
          />
       </div>
    );

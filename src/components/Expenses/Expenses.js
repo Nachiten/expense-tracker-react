@@ -33,7 +33,13 @@ function Expenses(props) {
       }
    }
 
-   let expensesContent = <ExpensesList deleteExpenseHandler={props.deleteExpenseHandler} items={filteredArray} />;
+   let expensesContent = (
+      <ExpensesList
+         deleteExpenseHandler={props.deleteExpenseHandler}
+         editExpenseHandler={props.editExpenseHandler}
+         items={filteredArray}
+      />
+   );
 
    if (props.error) {
       expensesContent = (
